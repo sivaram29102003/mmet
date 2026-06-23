@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TCS eTMS</title>
     
-    <meta name="theme-color" content="#4b5563">
+    <meta name="theme-color" content="#48426d">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="manifest" href="/manifest.json">
@@ -168,9 +168,10 @@
     }
 
     .rect-input:focus {
-        border-color: #2f2956; /* Robotic green glow on focus */
-        box-shadow: #2f2956;
-    }
+    outline: none;
+    border-color: #2f2956;
+    box-shadow: 0 0 0 2px rgba(47,41,86,0.4);
+}
 
     /* Stylish Swipe Button Component */
     .swipe-container {
@@ -190,7 +191,7 @@
         position: absolute;
         font-size: 0.85rem;
         color: #888;
-        letter-spacing: 3px;
+        letter-spacing: 1px;
         text-transform: uppercase;
         pointer-events: none; /* Allows dragging right through the text */
         z-index: 1;
@@ -301,7 +302,13 @@
 
     <div class="swipe-container">
         <span class="swipe-text" id="swipeText">Swipe to Enter</span>
-        <input type="range" min="0" max="100" value="0" class="swipe-slider" id="swipeGate">
+      <input type="range"
+       min="0"
+       max="100"
+       value="0"
+       class="swipe-slider"
+       id="swipeGate"
+       tabindex="-1">
     </div>
 
     <div class="status-message" id="statusMsg"></div>
