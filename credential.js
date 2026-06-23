@@ -9,14 +9,7 @@ const swipeGate = document.getElementById('swipeGate');
         // Fade text out as you swipe closer to the edge
         swipeText.style.opacity = (100 - this.value) / 100;
     });
-    swipeGate.addEventListener("focus", () => {
-    swipeGate.blur();
-});
-
-swipeGate.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-    swipeGate.blur();
-});
+   
 
     // Triggered when the user releases the slide handle
     swipeGate.addEventListener('change', function() {
