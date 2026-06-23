@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TCS eTMS</title>
     
-    <!-- PWA Meta Tags (Added) -->
-    <meta name="theme-color" content="#3D4CED">
+    <meta name="theme-color" content="#4b5563">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="manifest" href="/manifest.json">
@@ -15,135 +14,302 @@
         * {
             margin: 0;
             padding: 0;
-          
+            box-sizing: border-box;
         }
         
-    
-        
-     
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;          
+            overflow: hidden;        
+            background: #ffffff;    /* Plain Grey Background */
+            font-family: sans-serif;
+        }
+
+        .phone-container {
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
+            height: calc(var(--app-height, 100vh));
+            max-width: 430px;        
+            position: relative;
+            margin: 0 auto;         /* Centers the container on desktop screens */
+        }
+
         .phone-screen {
             width: 100%;
             height: 100%;
-            background: #2854b4;
+            background: #48426d;
             position: relative;
+            padding: 20px;
         }
         
+       
 
-        html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    height: 100dvh;          /* real visible viewport height, fixes vh glitch */
-    overflow: hidden;        /* ← stops ALL scrolling */
-    background: #6437C8;    /* ← matches screenshot background */
-}
+        /* STRICT PORTRAIT LOCK OVERLAY */
+        .rotate-overlay { 
+            display: none; 
+        }
 
-.phone-container {
-    width: 100%;
-    height: 100%;
-    height: 100dvh;
-    height: calc(var(--app-height, 100vh));
-    max-width: 430px;        /* ← caps on larger screens */
-    position: relative;
-}
-    .screenshot {
-    position: absolute;
-    inset: 0;
-    background: url('exact.jpeg') no-repeat center top;  /* ← 'top' instead of 'center' */
-    background-size: cover;
-}
+        /* Triggers on ALL landscape displays, including laptops and desktops */
+        @media (orientation: landscape) {
+            .phone-container { 
+                display: none !important; 
+            }
+            .rotate-overlay {
+                display: flex !important;
+                position: fixed;
+                inset: 0;
+                background: #1f2937; /* Dark grey overlay screen */
+                color: #fff;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 24px;
+                z-index: 9999;
+            }
+            .rotate-overlay svg {
+                width: 64px; 
+                height: 64px; 
+                margin-bottom: 16px;
+                animation: rotateHint 1.6s ease-in-out infinite;
+            }
+            .rotate-overlay p { 
+                font-size: 16px; 
+                font-weight: 600; 
+                max-width: 260px; 
+                line-height: 1.4; 
+            }
+            @keyframes rotateHint {
+                0%, 100% { transform: rotate(0deg); }
+                50% { transform: rotate(-90deg); }
+            }
+        }
 
-    .rotate-overlay { display: none; }
-    @media (orientation: landscape) {
-      .phone-container { display: none; }
-      .rotate-overlay {
+    /* Import the robotic font */
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+    .tracker-header {
+        /* Centering and positioning at the top */
+        text-align: center;
+        margin-top: 0;
+        padding-top: 20px; 
+        
+        /* General font styling */
+        font-family: 'Orbitron', monospace;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #000000;
+        margin-bottom: 80px;
+    }
+
+    .welcome-text {
+        display: block;       /* Forces the text to its own line */
+        font-size: 2.0rem;    /* Smaller size for the intro text */
+        letter-spacing: 2px;
+        margin-bottom: 5px;  
+         /* Adds a tiny gap between the two lines */
+    }
+
+    .mmet-text {
+        display: block;       /* Forces the text to its own line */
+        font-size: 25px;    /* Much larger size for the acronym */
+        letter-spacing: 3px;
+        color: #f4f4f4;
+    }
+
+    /* Import robotic font if not already loaded */
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+
+    /* Main layout container to keep it perfectly centered */
+    .credential-wrapper {
         display: flex;
-        position: fixed;
-        inset: 0;
-        background: #2C125B;
-        color: #fff;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        text-align: center;
-        padding: 24px;
-        z-index: 9999;
-        font-family: sans-serif;
-      }
-      .rotate-overlay svg {
-        width: 64px; height: 64px; margin-bottom: 16px;
-        animation: rotateHint 1.6s ease-in-out infinite;
-      }
-      .rotate-overlay p { font-size: 16px; font-weight: 600; max-width: 260px; line-height: 1.4; }
-      @keyframes rotateHint {
-        0%, 100% { transform: rotate(0deg); }
-        50% { transform: rotate(-90deg); }
-      }
+        font-family: 'Orbitron', monospace;
+        margin: 40px auto;
+        padding: 20px;
+        max-width: 400px;
     }
-  
-        
-        /* Bottom white bar */
-     
-        
-        /* Clickable overlay buttons */
-        .overlay-btn {
-            position: absolute;
-            border-radius: 50px;
-            transition: all 0.15s ease;
-            z-index: 3;
-        }
-        
-        .overlay-btn:active {
-            background: none;
-        }
-        
-        .btn-bus {
-            top: 25%;
-            left: 10%;
-            width: 89%;
-            height: 86px;
-        }
-        
-        .btn-cab {
-            top: 40%;
-            left: 10%;
-            width: 89%;
-            height: 86px;
-        }
-        
-        .btn-geocode {
-            top: 55%;
-            left: 10%;
-            width: 89%;
-            height: 86px;
-        }
+
+    .credential-title {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #030303;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+        letter-spacing: 2px;
+    }
+
+    /* Sharp, rectangular input styling */
+    .input-container {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+        margin-bottom: 25px;
+    }
+
+    .rect-input {
+        width: 100%;
+        padding: 12px;
+        background-color: #414141;
+        border: 2px solid #1a1a1a;
+        border-radius: 0px; /* Forces sharp rectangular edges */
+        font-family: 'Orbitron', monospace;
+        font-size: 1.1rem;
+        font-weight: bold;
+        text-align: center;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .rect-input:focus {
+        border-color: #2f2956; /* Robotic green glow on focus */
+        box-shadow: #2f2956;
+    }
+
+    /* Stylish Swipe Button Component */
+    .swipe-container {
+        position: relative;
+        width: 100%;
+        height: 55px;
+        background-color: #1a1a1a;
+        border: 2px solid #1a1a1a;
+        border-radius: 0px; /* Sharp rectangular design */
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .swipe-text {
+        position: absolute;
+        font-size: 0.85rem;
+        color: #888;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        pointer-events: none; /* Allows dragging right through the text */
+        z-index: 1;
+        font-weight: 700;
+    }
+
+    .swipe-slider {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        outline: none;
+        position: relative;
+        z-index: 2;
+        cursor: pointer;
+        margin: 0;
+    }
+
+    /* Customizing the swipe handle block (Webkit browsers like Chrome/Safari/Edge) */
+    .swipe-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 70px;
+        height: 51px;
+        background-color: #2f2956; /* Bright robotic green block */
+        border-radius: 0px;
+        cursor: grab;
+        transition: background-color 0.2s;
+    }
+
+    .swipe-slider::-webkit-slider-thumb:active {
+        cursor: grabbing;
+        background-color: #2f2956;
+    }
+
+    /* Customizing the swipe handle block (Firefox) */
+    .swipe-slider::-moz-range-thumb {
+        width: 70px;
+        height: 51px;
+        background-color: #2f2956;
+        border: none;
+        border-radius: 0px;
+        cursor: grab;
+    }
+
+    /* Feedback message styling */
+    .status-message {
+        margin-top: 15px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        letter-spacing: 1px;
+        height: 20px;
+        text-align: center;
+    }
+    
+    .error-state {
+        color: #000000;
+    }
+    
+    .success-state {
+        color: #ffffff;
+    }
+    /* Container to hold the image at the bottom */
+    .bottom-image-container {
+        width: 100%;
+        max-width: 400px;         /* Matches the width of your credential box */
+        aspect-ratio: 16 / 9;     /* Forces the perfect 16:9 rectangular shape */
+        margin: 50px auto 20px auto; /* Pushes it down to the bottom and centers it */
+      /* Sharp dark border to match your theme */
+        background-color: #48426d;   /* Dark placeholder background while image loads */
+        overflow: hidden;          /* Keeps the image perfectly inside the frame */
+    }
+
+    /* Styling for the actual image */
+    .bottom-image-container img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;         /* Crops and fills the 16:9 space without stretching */
+    }
     </style>
 </head>
 <body>
+
     <div class="rotate-overlay">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="5" y="2" width="14" height="20" rx="2"></rect>
-        <line x1="12" y1="18" x2="12" y2="18"></line>
-      </svg>
-      <p>Please rotate your device back to portrait mode to use this app.</p>
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2"></rect>
+            <line x1="12" y1="18" x2="12" y2="18"></line>
+        </svg>
+        <p>Please rotate your device back to portrait mode to use this app.</p>
     </div>
 
     <div class="phone-container">
         <div class="phone-screen">
-            <!-- Top fill -->
+         <div class="tracker-header">
+    <span class="welcome-text">Welcome To</span>
+    <span class="mmet-text">My Money Expense Tracker</span>
+</div>
 
-            
-            <!-- Screenshot -->
-            <div class="screenshot"></div>
-            
-           
-            
-            <!-- Clickable Areas -->
-            <div class="overlay-btn btn-bus" onclick="window.location.href='home.html'"></div>
-            <div class="overlay-btn btn-cab" onclick="window.location.href='home.html'"></div>
-            <div class="overlay-btn btn-geocode" onclick="window.location.href='home.html'"></div>
-        </div>
+<div class="credential-wrapper">
+    <div class="credential-title">Siva'S credential</div>
+    
+    <div class="input-container">
+        <input type="text" id="box1" class="rect-input" placeholder="Name" autocomplete="off">
+        <input type="password" id="box2" class="rect-input" placeholder="Password">
+    </div>
+
+    <div class="swipe-container">
+        <span class="swipe-text" id="swipeText">Swipe to Enter</span>
+        <input type="range" min="0" max="100" value="0" class="swipe-slider" id="swipeGate">
+    </div>
+
+    <div class="status-message" id="statusMsg"></div>
+</div>
+<div class="bottom-image-container">
+    <img src="Copilot_20260623_213923.png" alt="Tracker Graphic">
+</div>
+          
     </div>
 
     <script>
@@ -159,22 +325,23 @@
         window.addEventListener('resize', setAppHeight);
         window.addEventListener('orientationchange', setAppHeight);
 
-        // Lock orientation to portrait wherever the browser allows it
+        // Lock orientation to portrait wherever the browser platform allows it
         function lockPortrait() {
             try {
                 if (screen.orientation && screen.orientation.lock) {
                     screen.orientation.lock('portrait').catch(() => {});
                 }
-            } catch (e) { /* not supported — CSS overlay covers it */ }
+            } catch (e) {}
         }
         lockPortrait();
         window.addEventListener('load', lockPortrait);
         document.addEventListener('fullscreenchange', lockPortrait);
 
-        // PWA Service Worker (Added)
+        // PWA Service Worker Link
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js');
         }
     </script>
+    <script src="credential.js"></script>
 </body>
 </html>
