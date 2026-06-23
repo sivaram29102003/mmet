@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TCS eTMS</title>
+    
+    <!-- PWA Meta Tags (Added) -->
+    <meta name="theme-color" content="#3D4CED">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="manifest" href="/manifest.json">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+          
+        }
+        
+    
+        
+     
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #2854b4;
+            position: relative;
+        }
+        
+
+        html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;          /* real visible viewport height, fixes vh glitch */
+    overflow: hidden;        /* ← stops ALL scrolling */
+    background: #6437C8;    /* ← matches screenshot background */
+}
+
+.phone-container {
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    height: calc(var(--app-height, 100vh));
+    max-width: 430px;        /* ← caps on larger screens */
+    position: relative;
+}
+    .screenshot {
+    position: absolute;
+    inset: 0;
+    background: url('exact.jpeg') no-repeat center top;  /* ← 'top' instead of 'center' */
+    background-size: cover;
+}
+
+    .rotate-overlay { display: none; }
+    @media (orientation: landscape) {
+      .phone-container { display: none; }
+      .rotate-overlay {
+        display: flex;
+        position: fixed;
+        inset: 0;
+        background: #2C125B;
+        color: #fff;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 24px;
+        z-index: 9999;
+        font-family: sans-serif;
+      }
+      .rotate-overlay svg {
+        width: 64px; height: 64px; margin-bottom: 16px;
+        animation: rotateHint 1.6s ease-in-out infinite;
+      }
+      .rotate-overlay p { font-size: 16px; font-weight: 600; max-width: 260px; line-height: 1.4; }
+      @keyframes rotateHint {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(-90deg); }
+      }
+    }
+  
+        
+        /* Bottom white bar */
+     
+        
+        /* Clickable overlay buttons */
+        .overlay-btn {
+            position: absolute;
+            border-radius: 50px;
+            transition: all 0.15s ease;
+            z-index: 3;
+        }
+        
+        .overlay-btn:active {
+            background: none;
+        }
+        
+        .btn-bus {
+            top: 25%;
+            left: 10%;
+            width: 89%;
+            height: 86px;
+        }
+        
+        .btn-cab {
+            top: 40%;
+            left: 10%;
+            width: 89%;
+            height: 86px;
+        }
+        
+        .btn-geocode {
+            top: 55%;
+            left: 10%;
+            width: 89%;
+            height: 86px;
+        }
+    </style>
+</head>
+<body>
+    <div class="rotate-overlay">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="2" width="14" height="20" rx="2"></rect>
+        <line x1="12" y1="18" x2="12" y2="18"></line>
+      </svg>
+      <p>Please rotate your device back to portrait mode to use this app.</p>
+    </div>
+
+    <div class="phone-container">
+        <div class="phone-screen">
+            <!-- Top fill -->
+
+            
+            <!-- Screenshot -->
+            <div class="screenshot"></div>
+            
+           
+            
+            <!-- Clickable Areas -->
+            <div class="overlay-btn btn-bus" onclick="window.location.href='home.html'"></div>
+            <div class="overlay-btn btn-cab" onclick="window.location.href='home.html'"></div>
+            <div class="overlay-btn btn-geocode" onclick="window.location.href='home.html'"></div>
+        </div>
+    </div>
+
+    <script>
+        function selectService(service) {
+            alert(`✅ ${service} selected!`);
+        }
+
+        // Keep .phone-container sized to the real visible viewport
+        function setAppHeight() {
+            document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
+        }
+        setAppHeight();
+        window.addEventListener('resize', setAppHeight);
+        window.addEventListener('orientationchange', setAppHeight);
+
+        // Lock orientation to portrait wherever the browser allows it
+        function lockPortrait() {
+            try {
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('portrait').catch(() => {});
+                }
+            } catch (e) { /* not supported — CSS overlay covers it */ }
+        }
+        lockPortrait();
+        window.addEventListener('load', lockPortrait);
+        document.addEventListener('fullscreenchange', lockPortrait);
+
+        // PWA Service Worker (Added)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
+</body>
+</html>
