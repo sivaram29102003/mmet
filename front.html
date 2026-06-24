@@ -2,667 +2,834 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>MMET — Dashboard</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MMET - Dashboard</title>
+<meta name="theme-color" content="#2563eb">
+<link rel="manifest" href="manifest.json">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 :root {
-    --bg:        #48426d;
-    --bg-dark:   #342e55;
-    --bg-deeper: #28234a;
-    --accent:    #c9b8ff;
-    --accent2:   #8b7fd4;
-    --confirmed: #4caf8a;
-    --doubted:   #e07b5a;
-    --surface:   rgba(255,255,255,0.06);
-    --surface2:  rgba(255,255,255,0.11);
-    --border:    rgba(255,255,255,0.12);
-    --text:      #f0ecff;
-    --text-dim:  #a099c8;
-    --font-head: 'Orbitron', monospace;
-    --font-body: 'Rajdhani', sans-serif;
-    --radius:    6px;
+    --bg: #f4f7fb;
+    --panel: #ffffff;
+    --panel-soft: #eef4ff;
+    --ink: #111827;
+    --muted: #64748b;
+    --line: #d9e2ef;
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --green: #16a34a;
+    --amber: #d97706;
+    --red: #dc2626;
+    --teal: #0f766e;
+    --radius: 8px;
+    --shadow: 0 18px 54px rgba(15, 23, 42, 0.1);
 }
 
-html, body {
-    width: 100%; height: 100%; overflow: hidden;
-    background: var(--bg-deeper);
-    font-family: var(--font-body);
-    color: var(--text);
+html,
+body {
+    min-height: 100%;
 }
 
-/* ── APP SHELL ── */
+body {
+    min-height: 100dvh;
+    background:
+        radial-gradient(circle at top right, rgba(20, 184, 166, 0.13), transparent 28rem),
+        linear-gradient(180deg, #fbfdff 0%, var(--bg) 100%);
+    color: var(--ink);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
 .app {
-    width: 100%; max-width: 430px;
-    height: 100dvh;
+    width: min(1180px, 100%);
+    min-height: 100dvh;
     margin: 0 auto;
-    background: var(--bg);
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
+    padding: 24px;
 }
 
-/* ── HEADER ── */
-.header {
-    padding: 15px 15px 12px;
-    background: var(--bg-dark);
-    border-bottom: 1px solid var(--border);
+.topbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-shrink: 0;
+    gap: 18px;
+    margin-bottom: 20px;
 }
 
-.header-brand {
-    display: flex;
-    flex-direction: column;
-}
-
-.header-brand .brand-name {
-    font-family: var(--font-head);
-    font-size: 1.05rem;
-    font-weight: 900;
-    letter-spacing: 3px;
-    color: var(--accent);
+.brand h1 {
+    font-size: clamp(1.9rem, 4vw, 3rem);
     line-height: 1;
+    margin-bottom: 7px;
 }
 
-.header-brand .brand-sub {
-    font-size: 0.68rem;
-    color: var(--text-dim);
-    letter-spacing: 1.5px;
-    margin-top: 3px;
-    font-weight: 500;
+.brand p {
+    color: var(--muted);
+    line-height: 1.45;
 }
 
-/* Profile image square */
-.profile-box {
-    width: 48px;
-    height: 48px;
-    border: 2px solid var(--accent2);
+.profile-panel {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid var(--line);
     border-radius: var(--radius);
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-    background: var(--bg-deeper);
-    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.88);
+    padding: 10px;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.07);
 }
 
-.profile-box img {
-    width: 100%; height: 100%;
+.avatar-button {
+    width: 62px;
+    height: 62px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel-soft);
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+}
+
+.avatar-button img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     display: block;
 }
 
-.profile-upload-hint {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 2px;
-    background: var(--bg-deeper);
+.avatar-initials {
+    font-weight: 800;
+    font-size: 1.1rem;
 }
 
-.profile-upload-hint span {
-    font-size: 18px;
-    line-height: 1;
-}
-
-.profile-upload-hint small {
-    font-size: 0.5rem;
-    color: var(--text-dim);
-    letter-spacing: 0.5px;
-    text-align: center;
-}
-
-#profileInput { display: none; }
-
-/* ── ADD MH BUTTON ── */
-.add-btn-wrap {
-    padding: 12px 15px;
-    flex-shrink: 0;
-}
-
-.add-btn {
-    width: 100%;
-    padding: 13px;
-    background: linear-gradient(135deg, var(--accent2) 0%, #6b5fc2 100%);
-    border: none;
-    border-radius: var(--radius);
-    font-family: var(--font-head);
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 3px;
-    color: #fff;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: opacity 0.2s, transform 0.1s;
-    box-shadow: 0 4px 18px rgba(139,127,212,0.35);
-}
-
-.add-btn:active { opacity: 0.85; transform: scale(0.98); }
-
-/* ── CARDS AREA ── */
-.cards-area {
-    flex: 1;
-    overflow-y: auto;
-    padding: 10px 15px 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    -webkit-overflow-scrolling: touch;
-}
-
-.cards-area::-webkit-scrollbar { width: 3px; }
-.cards-area::-webkit-scrollbar-track { background: transparent; }
-.cards-area::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 2px; }
-
-/* empty state */
-.empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    gap: 10px;
-    color: var(--text-dim);
-    text-align: center;
-}
-
-.empty-state .empty-icon { font-size: 2.5rem; opacity: 0.4; }
-.empty-state p { font-size: 0.9rem; letter-spacing: 0.5px; }
-
-/* card */
-.entry-card {
-    border-radius: var(--radius);
-    padding: 13px 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    transition: transform 0.15s, opacity 0.15s;
-    border: 1px solid var(--border);
-    position: relative;
-    overflow: hidden;
-}
-
-.entry-card::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 4px;
-    border-radius: var(--radius) 0 0 var(--radius);
-}
-
-.entry-card.confirmed {
-    background: rgba(76,175,138,0.12);
-    border-color: rgba(76,175,138,0.28);
-}
-.entry-card.confirmed::before { background: var(--confirmed); }
-
-.entry-card.doubted {
-    background: rgba(224,123,90,0.12);
-    border-color: rgba(224,123,90,0.28);
-}
-.entry-card.doubted::before { background: var(--doubted); }
-
-.entry-card:active { transform: scale(0.985); opacity: 0.85; }
-
-.card-left { display: flex; flex-direction: column; gap: 3px; }
-
-.card-title {
-    font-family: var(--font-head);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: var(--text);
-}
-
-.card-desc {
-    font-size: 0.8rem;
-    color: var(--text-dim);
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-
-.card-amount {
-    font-family: var(--font-head);
-    font-size: 0.88rem;
-    font-weight: 700;
-}
-
-.entry-card.confirmed .card-amount { color: var(--confirmed); }
-.entry-card.doubted .card-amount { color: var(--doubted); }
-
-.card-badge {
-    font-size: 0.6rem;
-    letter-spacing: 1px;
-    padding: 2px 7px;
-    border-radius: 20px;
-    font-weight: 600;
-}
-
-.entry-card.confirmed .card-badge {
-    background: rgba(76,175,138,0.2);
-    color: var(--confirmed);
-}
-.entry-card.doubted .card-badge {
-    background: rgba(224,123,90,0.2);
-    color: var(--doubted);
-}
-
-/* ── FOOTER ── */
-.footer {
-    flex-shrink: 0;
-    height: 72px;
-    background: var(--bg-dark);
-    border-top: 1px solid var(--border);
-    display: flex;
-    align-items: stretch;
-    padding: 0;
-}
-
-.footer-cell {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    border-right: 1px solid var(--border);
-    padding: 8px 4px;
-}
-
-.footer-cell:last-child { border-right: none; }
-
-.footer-label {
-    font-size: 0.58rem;
-    letter-spacing: 1.5px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    font-weight: 600;
-}
-
-.footer-amount {
-    font-family: var(--font-head);
-    font-size: 0.82rem;
-    font-weight: 700;
-}
-
-.footer-cell:nth-child(1) .footer-amount { color: var(--accent); }
-.footer-cell:nth-child(2) .footer-amount { color: var(--confirmed); }
-.footer-cell:nth-child(3) .footer-amount { color: var(--doubted); }
-
-/* ── MODAL OVERLAY ── */
-.modal-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(20,16,40,0.78);
-    backdrop-filter: blur(4px);
-    display: flex;
-    align-items: flex-end;
-    z-index: 100;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s;
-}
-
-.modal-overlay.open {
-    opacity: 1;
-    pointer-events: all;
-}
-
-.modal-sheet {
-    width: 100%;
-    background: var(--bg-dark);
-    border-radius: 16px 16px 0 0;
-    padding: 20px 18px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    transform: translateY(40px);
-    transition: transform 0.28s cubic-bezier(.4,0,.2,1);
-}
-
-.modal-overlay.open .modal-sheet { transform: translateY(0); }
-
-.modal-title {
-    font-family: var(--font-head);
-    font-size: 0.78rem;
-    letter-spacing: 2px;
-    color: var(--accent);
-    text-align: center;
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--border);
-}
-
-/* inputs */
-.field-label {
-    font-size: 0.72rem;
-    letter-spacing: 1px;
-    color: var(--text-dim);
-    margin-bottom: 5px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.m-input {
-    width: 100%;
-    padding: 11px 13px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    color: var(--text);
-    font-family: var(--font-body);
+.profile-copy strong {
+    display: block;
     font-size: 0.95rem;
-    outline: none;
-    transition: border-color 0.2s;
+    margin-bottom: 6px;
 }
 
-.m-input:focus { border-color: var(--accent2); }
-.m-input::placeholder { color: var(--text-dim); opacity: 0.6; }
-
-/* type toggle */
-.type-toggle {
+.photo-actions {
     display: flex;
     gap: 8px;
 }
 
-.type-btn {
-    flex: 1;
-    padding: 10px;
-    border: 1.5px solid var(--border);
+.small-btn {
+    min-height: 34px;
+    border: 1px solid var(--line);
     border-radius: var(--radius);
-    background: var(--surface);
-    color: var(--text-dim);
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    letter-spacing: 0.5px;
-    transition: all 0.18s;
+    background: #ffffff;
+    color: var(--ink);
+    padding: 0 10px;
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+.small-btn.danger {
+    color: var(--red);
+    border-color: rgba(220, 38, 38, 0.28);
+}
+
+.small-btn[hidden] {
+    display: none;
+}
+
+#profileInput {
+    display: none;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0, 390px) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.tool-panel,
+.list-panel {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: var(--shadow);
+}
+
+.tool-panel {
+    padding: 20px;
+}
+
+.panel-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.panel-title h2 {
+    font-size: 1.1rem;
+}
+
+.panel-title span {
+    color: var(--muted);
+    font-size: 0.86rem;
+}
+
+.field {
+    margin-bottom: 15px;
+}
+
+.field label {
+    display: block;
+    color: #334155;
+    font-size: 0.84rem;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.field input,
+.field textarea {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: #ffffff;
+    color: var(--ink);
+    padding: 12px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field textarea {
+    resize: vertical;
+    min-height: 88px;
+}
+
+.field input:focus,
+.field textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.segmented {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.type-btn {
+    min-height: 44px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: #ffffff;
+    color: var(--muted);
+    font-weight: 800;
 }
 
 .type-btn.active-confirmed {
-    background: rgba(76,175,138,0.18);
-    border-color: var(--confirmed);
-    color: var(--confirmed);
+    border-color: rgba(22, 163, 74, 0.4);
+    background: rgba(22, 163, 74, 0.08);
+    color: var(--green);
 }
 
 .type-btn.active-doubted {
-    background: rgba(224,123,90,0.18);
-    border-color: var(--doubted);
-    color: var(--doubted);
+    border-color: rgba(217, 119, 6, 0.45);
+    background: rgba(217, 119, 6, 0.1);
+    color: var(--amber);
 }
 
-.modal-error {
-    font-size: 0.78rem;
-    color: var(--doubted);
-    text-align: center;
-    min-height: 16px;
-    letter-spacing: 0.5px;
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
 }
 
-/* save button */
-.save-btn {
-    width: 100%;
-    padding: 13px;
-    background: linear-gradient(135deg, var(--accent2) 0%, #5a4fb5 100%);
-    border: none;
+.primary-btn,
+.ghost-btn {
+    min-height: 46px;
     border-radius: var(--radius);
-    font-family: var(--font-head);
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    color: #fff;
-    cursor: pointer;
-    transition: opacity 0.2s;
+    font-weight: 800;
+    border: 0;
+    padding: 0 14px;
 }
 
-.save-btn:active { opacity: 0.8; }
+.primary-btn {
+    flex: 1;
+    background: var(--primary);
+    color: #ffffff;
+}
 
-.cancel-link {
+.primary-btn:active,
+.ghost-btn:active,
+.small-btn:active,
+.type-btn:active,
+.entry-card:active {
+    transform: translateY(1px);
+}
+
+.ghost-btn {
+    background: #e8eef7;
+    color: #334155;
+}
+
+.form-error,
+.profile-status {
+    min-height: 19px;
+    color: var(--red);
+    font-size: 0.86rem;
+}
+
+.profile-status {
+    color: var(--muted);
+    margin-top: 6px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.metric-card {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: #ffffff;
+    padding: 16px;
+}
+
+.metric-card span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.82rem;
+    margin-bottom: 8px;
+}
+
+.metric-card strong {
+    display: block;
+    font-size: clamp(1.15rem, 2.2vw, 1.8rem);
+    line-height: 1.05;
+}
+
+.metric-card.confirmed strong {
+    color: var(--green);
+}
+
+.metric-card.doubted strong {
+    color: var(--amber);
+}
+
+.list-panel {
+    padding: 18px;
+}
+
+.list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.list-header h2 {
+    font-size: 1.1rem;
+}
+
+.list-header span {
+    color: var(--muted);
+    font-size: 0.86rem;
+}
+
+.entry-list {
+    display: grid;
+    gap: 10px;
+}
+
+.entry-card {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-left-width: 5px;
+    border-radius: var(--radius);
+    background: #ffffff;
+    padding: 14px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 14px;
+    text-align: left;
+}
+
+.entry-card.confirmed {
+    border-left-color: var(--green);
+}
+
+.entry-card.doubted {
+    border-left-color: var(--amber);
+}
+
+.entry-title {
+    font-weight: 800;
+    color: var(--ink);
+    margin-bottom: 5px;
+    overflow-wrap: anywhere;
+}
+
+.entry-desc {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.entry-side {
+    display: grid;
+    justify-items: end;
+    gap: 7px;
+    align-content: start;
+}
+
+.entry-amount {
+    font-weight: 800;
+    color: var(--ink);
+    white-space: nowrap;
+}
+
+.badge {
+    border-radius: 999px;
+    padding: 4px 9px;
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.badge.confirmed {
+    color: var(--green);
+    background: rgba(22, 163, 74, 0.09);
+}
+
+.badge.doubted {
+    color: var(--amber);
+    background: rgba(217, 119, 6, 0.11);
+}
+
+.empty-state {
+    border: 1px dashed #cbd5e1;
+    border-radius: var(--radius);
+    background: #f8fafc;
+    color: var(--muted);
+    padding: 34px 18px;
     text-align: center;
-    font-size: 0.8rem;
-    color: var(--text-dim);
-    cursor: pointer;
-    letter-spacing: 0.5px;
+    line-height: 1.5;
 }
 
-.cancel-link:active { opacity: 0.6; }
+@media (max-width: 880px) {
+    .app {
+        padding: 18px;
+    }
+
+    .topbar,
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        display: grid;
+    }
+}
+
+@media (max-width: 560px) {
+    .app {
+        padding: 14px;
+    }
+
+    .profile-panel {
+        align-items: flex-start;
+    }
+
+    .photo-actions,
+    .form-actions {
+        flex-wrap: wrap;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .entry-card {
+        grid-template-columns: 1fr;
+    }
+
+    .entry-side {
+        justify-items: start;
+    }
+}
 </style>
 </head>
 <body>
-
-<div class="app">
-
-    <!-- HEADER -->
-    <div class="header">
-        <div class="header-brand">
-            <span class="brand-name">Siva MMET</span>
-            <span class="brand-sub">My Money Expense Tracker</span>
+<main class="app">
+    <header class="topbar">
+        <div class="brand">
+            <h1>MMET</h1>
+            <p>My Money Expense Tracker</p>
         </div>
 
-        <div class="profile-box" onclick="document.getElementById('profileInput').click()">
-            <div class="profile-upload-hint" id="profileHint">
-                <span>📷</span>
-                <small>UPLOAD</small>
+        <div class="profile-panel">
+            <button class="avatar-button" id="profilePickBtn" type="button" aria-label="Change profile photo">
+                <img id="profileImg" src="" alt="Profile photo" hidden>
+                <span class="avatar-initials" id="profileInitials">SM</span>
+            </button>
+            <div class="profile-copy">
+                <strong>Siva</strong>
+                <div class="photo-actions">
+                    <button class="small-btn" id="profileUploadBtn" type="button">Change photo</button>
+                    <button class="small-btn danger" id="profileRemoveBtn" type="button" hidden>Remove photo</button>
+                </div>
+                <div class="profile-status" id="profileStatus" aria-live="polite"></div>
             </div>
-            <img id="profileImg" src="https://placehold.co/48x48/342e55/c9b8ff?text=S" alt="Profile" style="display:none">
+            <input type="file" id="profileInput" accept="image/*">
         </div>
-        <input type="file" id="profileInput" accept="image/*">
-    </div>
+    </header>
 
-    <!-- ADD MH BUTTON -->
-    <div class="add-btn-wrap">
-        <button class="add-btn" onclick="openModal()">＋ &nbsp; ADD MH</button>
-    </div>
-
-    <!-- CARDS -->
-    <div class="cards-area" id="cardsArea">
-        <div class="empty-state" id="emptyState">
-            <div class="empty-icon">💰</div>
-            <p>No entries yet.<br>Tap ADD MH to begin.</p>
+    <section class="stats-grid" aria-label="Money totals">
+        <div class="metric-card">
+            <span>Total money</span>
+            <strong id="ftTotal">&#8377;0</strong>
         </div>
-    </div>
-
-    <!-- FOOTER -->
-    <div class="footer">
-        <div class="footer-cell">
-            <span class="footer-label">Tot Money</span>
-            <span class="footer-amount" id="ftTotal">₹0</span>
+        <div class="metric-card confirmed">
+            <span>Confirmed</span>
+            <strong id="ftConfirmed">&#8377;0</strong>
         </div>
-        <div class="footer-cell">
-            <span class="footer-label">Confirmed</span>
-            <span class="footer-amount" id="ftConfirmed">₹0</span>
+        <div class="metric-card doubted">
+            <span>Doubted</span>
+            <strong id="ftDoubted">&#8377;0</strong>
         </div>
-        <div class="footer-cell">
-            <span class="footer-label">Doubted</span>
-            <span class="footer-amount" id="ftDoubted">₹0</span>
-        </div>
-    </div>
+    </section>
 
-    <!-- ADD MODAL -->
-    <div class="modal-overlay" id="modalOverlay" onclick="overlayClick(event)">
-        <div class="modal-sheet">
-            <div class="modal-title">NEW ENTRY</div>
-
-            <div>
-                <div class="field-label">Title</div>
-                <input type="text" class="m-input" id="mTitle" placeholder="Enter title">
+    <div class="layout">
+        <section class="tool-panel" aria-label="Add entry">
+            <div class="panel-title">
+                <h2>Add entry</h2>
+                <span id="entryCount">0 saved</span>
             </div>
 
-            <div>
-                <div class="field-label">Money Type</div>
-                <div class="type-toggle">
-                    <button class="type-btn" id="btnConfirmed" onclick="selectType('confirmed')">✔ Confirmed</button>
-                    <button class="type-btn" id="btnDoubted"  onclick="selectType('doubted')">? Doubted</button>
+            <form id="entryForm" autocomplete="off">
+                <div class="field">
+                    <label for="mTitle">Title</label>
+                    <input type="text" id="mTitle" placeholder="Example: Rent, fuel, shopping">
+                </div>
+
+                <div class="field">
+                    <label>Money type</label>
+                    <div class="segmented" role="group" aria-label="Money type">
+                        <button class="type-btn active-confirmed" id="btnConfirmed" type="button" data-type="confirmed">Confirmed</button>
+                        <button class="type-btn" id="btnDoubted" type="button" data-type="doubted">Doubted</button>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="mAmount">Amount (INR)</label>
+                    <input type="number" id="mAmount" placeholder="0" min="0" step="0.01" inputmode="decimal">
+                </div>
+
+                <div class="field">
+                    <label for="mDesc">Description</label>
+                    <textarea id="mDesc" placeholder="Optional note"></textarea>
+                </div>
+
+                <div class="form-error" id="modalError" aria-live="polite"></div>
+
+                <div class="form-actions">
+                    <button class="primary-btn" type="submit">Save entry</button>
+                    <button class="ghost-btn" type="reset">Clear</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="list-panel" aria-label="Entries">
+            <div class="list-header">
+                <h2>Entries</h2>
+                <span>Tap an entry to edit</span>
+            </div>
+            <div class="entry-list" id="cardsArea">
+                <div class="empty-state" id="emptyState">
+                    No entries yet. Add your first money record to begin.
                 </div>
             </div>
-
-            <div>
-                <div class="field-label">Amount (₹)</div>
-                <input type="number" class="m-input" id="mAmount" placeholder="0" min="0">
-            </div>
-
-            <div>
-                <div class="field-label">Description <span style="color:var(--text-dim);font-size:0.65rem">(optional)</span></div>
-                <input type="text" class="m-input" id="mDesc" placeholder="Add a note…">
-            </div>
-
-            <div class="modal-error" id="modalError"></div>
-
-            <button class="save-btn" onclick="saveEntry()">SAVE ENTRY</button>
-            <div class="cancel-link" onclick="closeModal()">Cancel</div>
-        </div>
+        </section>
     </div>
-
-</div>
+</main>
 
 <script>
-// ── DATA ──────────────────────────────────────────────
-let entries = JSON.parse(localStorage.getItem('mmet_entries') || '[]');
-let selectedType = '';
+(function () {
+    var STORAGE_ENTRIES = "mmet_entries";
+    var STORAGE_EDIT = "mmet_edit_id";
+    var STORAGE_PHOTO = "mmet_profile_photo";
 
-function save() {
-    localStorage.setItem('mmet_entries', JSON.stringify(entries));
-}
+    var entries = readEntries();
+    var selectedType = "confirmed";
 
-// ── RENDER ────────────────────────────────────────────
-function render() {
-    const area = document.getElementById('cardsArea');
-    const empty = document.getElementById('emptyState');
+    var form = document.getElementById("entryForm");
+    var titleInput = document.getElementById("mTitle");
+    var amountInput = document.getElementById("mAmount");
+    var descInput = document.getElementById("mDesc");
+    var errorBox = document.getElementById("modalError");
+    var cardsArea = document.getElementById("cardsArea");
+    var emptyState = document.getElementById("emptyState");
+    var profileInput = document.getElementById("profileInput");
+    var profileImg = document.getElementById("profileImg");
+    var profileInitials = document.getElementById("profileInitials");
+    var profileUploadBtn = document.getElementById("profileUploadBtn");
+    var profilePickBtn = document.getElementById("profilePickBtn");
+    var profileRemoveBtn = document.getElementById("profileRemoveBtn");
+    var profileStatus = document.getElementById("profileStatus");
 
-    // Sort: confirmed first, doubted second
-    const sorted = [...entries].sort((a, b) => {
-        const order = { confirmed: 0, doubted: 1 };
-        return order[a.type] - order[b.type];
-    });
+    function stripSuffix(title) {
+        return String(title || "").trim().replace(/\s*-(c|d)$/i, "");
+    }
 
-    // Remove existing cards (keep emptyState)
-    area.querySelectorAll('.entry-card').forEach(el => el.remove());
+    function normalizeEntry(entry) {
+        var type = entry && entry.type === "doubted" ? "doubted" : "confirmed";
+        var amount = Number(entry && entry.amount);
+        return {
+            id: String(entry && entry.id ? entry.id : Date.now() + Math.random()),
+            title: stripSuffix(entry && entry.title ? entry.title : "Untitled"),
+            amount: Number.isFinite(amount) && amount >= 0 ? amount : 0,
+            type: type,
+            desc: String(entry && entry.desc ? entry.desc : "").trim(),
+            createdAt: entry && entry.createdAt ? entry.createdAt : new Date().toISOString()
+        };
+    }
 
-    if (sorted.length === 0) {
-        empty.style.display = 'flex';
-    } else {
-        empty.style.display = 'none';
-        sorted.forEach(entry => {
-            const card = document.createElement('div');
-            card.className = `entry-card ${entry.type}`;
-            card.dataset.id = entry.id;
-            card.innerHTML = `
-                <div class="card-left">
-                    <div class="card-title">${entry.title}</div>
-                    ${entry.desc ? `<div class="card-desc">${entry.desc}</div>` : ''}
-                </div>
-                <div class="card-right">
-                    <div class="card-amount">₹${Number(entry.amount).toLocaleString('en-IN')}</div>
-                    <div class="card-badge">${entry.type === 'confirmed' ? 'CONFIRMED' : 'DOUBTED'}</div>
-                </div>
-            `;
-            card.addEventListener('click', () => openEdit(entry.id));
-            area.appendChild(card);
+    function readEntries() {
+        try {
+            var parsed = JSON.parse(localStorage.getItem(STORAGE_ENTRIES) || "[]");
+            return Array.isArray(parsed) ? parsed.map(normalizeEntry) : [];
+        } catch (error) {
+            return [];
+        }
+    }
+
+    function saveEntries() {
+        localStorage.setItem(STORAGE_ENTRIES, JSON.stringify(entries));
+    }
+
+    function formatMoney(value) {
+        return "\u20b9" + Number(value || 0).toLocaleString("en-IN", {
+            maximumFractionDigits: 2
         });
     }
 
-    updateFooter();
-}
+    function setType(type) {
+        selectedType = type === "doubted" ? "doubted" : "confirmed";
+        document.getElementById("btnConfirmed").className = "type-btn" + (selectedType === "confirmed" ? " active-confirmed" : "");
+        document.getElementById("btnDoubted").className = "type-btn" + (selectedType === "doubted" ? " active-doubted" : "");
+    }
 
-function updateFooter() {
-    let confirmed = 0, doubted = 0;
-    entries.forEach(e => {
-        if (e.type === 'confirmed') confirmed += Number(e.amount);
-        else doubted += Number(e.amount);
+    function renderTotals() {
+        var confirmed = 0;
+        var doubted = 0;
+
+        entries.forEach(function (entry) {
+            if (entry.type === "doubted") {
+                doubted += Number(entry.amount);
+            } else {
+                confirmed += Number(entry.amount);
+            }
+        });
+
+        document.getElementById("ftTotal").textContent = formatMoney(confirmed + doubted);
+        document.getElementById("ftConfirmed").textContent = formatMoney(confirmed);
+        document.getElementById("ftDoubted").textContent = formatMoney(doubted);
+        document.getElementById("entryCount").textContent = entries.length + (entries.length === 1 ? " saved" : " saved");
+    }
+
+    function renderEntries() {
+        cardsArea.querySelectorAll(".entry-card").forEach(function (card) {
+            card.remove();
+        });
+
+        if (!entries.length) {
+            emptyState.hidden = false;
+            renderTotals();
+            return;
+        }
+
+        emptyState.hidden = true;
+
+        entries.slice().sort(function (a, b) {
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        }).forEach(function (entry) {
+            var card = document.createElement("button");
+            card.type = "button";
+            card.className = "entry-card " + entry.type;
+            card.addEventListener("click", function () {
+                localStorage.setItem(STORAGE_EDIT, entry.id);
+                window.location.href = "edit.html";
+            });
+
+            var main = document.createElement("div");
+            var title = document.createElement("div");
+            title.className = "entry-title";
+            title.textContent = entry.title;
+            main.appendChild(title);
+
+            if (entry.desc) {
+                var desc = document.createElement("div");
+                desc.className = "entry-desc";
+                desc.textContent = entry.desc;
+                main.appendChild(desc);
+            }
+
+            var side = document.createElement("div");
+            side.className = "entry-side";
+            var amount = document.createElement("div");
+            amount.className = "entry-amount";
+            amount.textContent = formatMoney(entry.amount);
+            var badge = document.createElement("div");
+            badge.className = "badge " + entry.type;
+            badge.textContent = entry.type === "confirmed" ? "Confirmed" : "Doubted";
+            side.appendChild(amount);
+            side.appendChild(badge);
+
+            card.appendChild(main);
+            card.appendChild(side);
+            cardsArea.appendChild(card);
+        });
+
+        renderTotals();
+    }
+
+    function saveNewEntry(event) {
+        event.preventDefault();
+        var title = titleInput.value.trim();
+        var amount = Number(amountInput.value);
+        var desc = descInput.value.trim();
+
+        errorBox.textContent = "";
+
+        if (!title) {
+            errorBox.textContent = "Title is required.";
+            titleInput.focus();
+            return;
+        }
+
+        if (!Number.isFinite(amount) || amount <= 0) {
+            errorBox.textContent = "Enter an amount greater than zero.";
+            amountInput.focus();
+            return;
+        }
+
+        entries.push({
+            id: Date.now().toString(),
+            title: stripSuffix(title),
+            amount: Math.round(amount * 100) / 100,
+            type: selectedType,
+            desc: desc,
+            createdAt: new Date().toISOString()
+        });
+
+        saveEntries();
+        form.reset();
+        setType("confirmed");
+        renderEntries();
+        titleInput.focus();
+    }
+
+    function setProfilePhoto(dataUrl) {
+        if (dataUrl) {
+            profileImg.src = dataUrl;
+            profileImg.hidden = false;
+            profileInitials.hidden = true;
+            profileRemoveBtn.hidden = false;
+        } else {
+            profileImg.removeAttribute("src");
+            profileImg.hidden = true;
+            profileInitials.hidden = false;
+            profileRemoveBtn.hidden = true;
+        }
+    }
+
+    function storeResizedPhoto(file) {
+        profileStatus.textContent = "";
+
+        if (!file || !file.type || file.type.indexOf("image/") !== 0) {
+            profileStatus.textContent = "Choose an image file.";
+            return;
+        }
+
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            var image = new Image();
+            image.onload = function () {
+                var maxSize = 720;
+                var scale = Math.min(1, maxSize / Math.max(image.width, image.height));
+                var width = Math.max(1, Math.round(image.width * scale));
+                var height = Math.max(1, Math.round(image.height * scale));
+                var canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+                var context = canvas.getContext("2d");
+                context.drawImage(image, 0, 0, width, height);
+                var dataUrl = canvas.toDataURL("image/jpeg", 0.84);
+
+                try {
+                    localStorage.setItem(STORAGE_PHOTO, dataUrl);
+                    setProfilePhoto(dataUrl);
+                    profileStatus.textContent = "Photo updated.";
+                } catch (error) {
+                    profileStatus.textContent = "Photo is too large to save.";
+                }
+            };
+            image.onerror = function () {
+                profileStatus.textContent = "Could not read that image.";
+            };
+            image.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    document.querySelectorAll("[data-type]").forEach(function (button) {
+        button.addEventListener("click", function () {
+            setType(button.getAttribute("data-type"));
+        });
     });
-    const fmt = n => '₹' + n.toLocaleString('en-IN');
-    document.getElementById('ftTotal').textContent     = fmt(confirmed + doubted);
-    document.getElementById('ftConfirmed').textContent = fmt(confirmed);
-    document.getElementById('ftDoubted').textContent   = fmt(doubted);
-}
 
-// ── MODAL ─────────────────────────────────────────────
-function openModal() {
-    selectedType = '';
-    document.getElementById('mTitle').value = '';
-    document.getElementById('mAmount').value = '';
-    document.getElementById('mDesc').value = '';
-    document.getElementById('modalError').textContent = '';
-    document.getElementById('btnConfirmed').className = 'type-btn';
-    document.getElementById('btnDoubted').className   = 'type-btn';
-    document.getElementById('modalOverlay').classList.add('open');
-}
+    form.addEventListener("submit", saveNewEntry);
+    form.addEventListener("reset", function () {
+        window.setTimeout(function () {
+            errorBox.textContent = "";
+            setType("confirmed");
+        }, 0);
+    });
 
-function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('open');
-}
+    profileUploadBtn.addEventListener("click", function () {
+        profileInput.click();
+    });
+    profilePickBtn.addEventListener("click", function () {
+        profileInput.click();
+    });
+    profileInput.addEventListener("change", function () {
+        storeResizedPhoto(profileInput.files[0]);
+        profileInput.value = "";
+    });
+    profileRemoveBtn.addEventListener("click", function () {
+        localStorage.removeItem(STORAGE_PHOTO);
+        setProfilePhoto("");
+        profileStatus.textContent = "Photo removed.";
+    });
 
-function overlayClick(e) {
-    if (e.target === document.getElementById('modalOverlay')) closeModal();
-}
-
-function selectType(type) {
-    selectedType = type;
-    document.getElementById('btnConfirmed').className = 'type-btn' + (type === 'confirmed' ? ' active-confirmed' : '');
-    document.getElementById('btnDoubted').className   = 'type-btn' + (type === 'doubted'   ? ' active-doubted'   : '');
-}
-
-function saveEntry() {
-    const title  = document.getElementById('mTitle').value.trim();
-    const amount = document.getElementById('mAmount').value.trim();
-    const desc   = document.getElementById('mDesc').value.trim();
-    const err    = document.getElementById('modalError');
-
-    if (!title) { err.textContent = 'Title is required.'; return; }
-    if (!selectedType) { err.textContent = 'Select Confirmed or Doubted.'; return; }
-    if (!amount || isNaN(amount) || Number(amount) < 0) { err.textContent = 'Enter a valid amount.'; return; }
-
-    const suffix = selectedType === 'confirmed' ? '-c' : '-d';
-    const entry = {
-        id:     Date.now().toString(),
-        title:  title + suffix,
-        amount: Number(amount),
-        type:   selectedType,
-        desc:   desc,
-        createdAt: new Date().toISOString()
-    };
-
-    entries.push(entry);
-    save();
-    render();
-    closeModal();
-}
-
-// ── EDIT NAV ──────────────────────────────────────────
-function openEdit(id) {
-    localStorage.setItem('mmet_edit_id', id);
-    window.location.href = 'edit.html';
-}
-
-// ── PROFILE UPLOAD ────────────────────────────────────
-document.getElementById('profileInput').addEventListener('change', function () {
-    const file = this.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-        const img = document.getElementById('profileImg');
-        img.src = e.target.result;
-        img.style.display = 'block';
-        document.getElementById('profileHint').style.display = 'none';
-    };
-    reader.readAsDataURL(file);
-});
-
-// ── INIT ─────────────────────────────────────────────
-render();
+    setProfilePhoto(localStorage.getItem(STORAGE_PHOTO));
+    saveEntries();
+    renderEntries();
+})();
 </script>
 </body>
 </html>
